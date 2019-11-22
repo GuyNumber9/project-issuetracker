@@ -55,10 +55,13 @@ db.on('error', (err) => {
   console.log("Database error: " + err);
 });
 
-db.once('open', () => {
-  console.log("Successful database connection");
+//Start our server and tests!
+app.listen(process.env.PORT || 3000, function () {
   //Routing for API
   apiRoutes(app, db);  
+db.once('open', () => {
+  console.log("Successful database connection");
+  
       
   //404 Not Found Middleware
   app.use(function(req, res, next) {
@@ -67,8 +70,7 @@ db.once('open', () => {
       .send('Not Found');
   });
 
-  //Start our server and tests!
-  app.listen(process.env.PORT || 3000, function () {
+  
     console.log("Listening on port " + (process.env.PORT || 3000));
     if(process.env.NODE_ENV==='test') {
       console.log('Running Tests...');
@@ -85,4 +87,7 @@ db.once('open', () => {
   });
 });
 
-module.exports = app; //for testing
+module.exports = {
+  app,
+  db
+}; //for testing
